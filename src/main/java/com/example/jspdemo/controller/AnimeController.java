@@ -20,10 +20,10 @@ public class AnimeController {
     @GetMapping({"/", "/animeList"})
     public String viewAnimeList(@ModelAttribute("message") String message, Model model){
     
-        model.addAttribute("animeList", animeService.getAllAnime());
+        model.addAttribute("animes", animeService.getAllAnime());
         model.addAttribute("message", message);
     
-        return "ViewAnimeList";
+        return "listAnime";
     }
 
     @GetMapping( "/addAnime")
@@ -36,11 +36,11 @@ public class AnimeController {
     @PostMapping("/saveAnime")
     public String saveAnime(Anime anime, RedirectAttributes redirectAttributes){
         if(animeService.saveOrUpdate(anime)){
-            redirectAttributes.addFlashAttribute("message", "Anime was successfully created");
-            return "redirect:/viewAnimeList";
+            redirectAttributes.addFlashAttribute("message", "Save Success");
+            return "redirect:/animeList";
         }
         
-        redirectAttributes.addFlashAttribute("message", "Unable to create anime");
+        redirectAttributes.addFlashAttribute("message", "Save Failure");
         return "redirect:/addAnime";
     }
     
@@ -52,24 +52,25 @@ public class AnimeController {
         return "editAnime";
     }
 
-    @PostMapping("/editSaveAnime")
+    @PostMapping("/saveEditAnime")
     public String editSaveAnime(Anime anime, RedirectAttributes redirectAttributes){
         if(animeService.saveOrUpdate(anime)){
-            redirectAttributes.addFlashAttribute("message", "Anime was successfully updated");
-            return "redirect:/viewAnimeList";
+            redirectAttributes.addFlashAttribute("message", "Update Success");
+            return "redirect:/animeList";
         }
 
-        redirectAttributes.addFlashAttribute("message", "Unable to update anime");
+        redirectAttributes.addFlashAttribute("message", "Update Failure");
         return "redirect:/addAnime/" + anime.getId();
     }
     
-    @GetMapping("/deleteAnimr/{id}")
+    @GetMapping("/deleteAnime/{id}")
     public String deleteAnime(@PathVariable Long id, RedirectAttributes redirectAttributes){
         if(animeService.deleteAnime(id)){
-            redirectAttributes.addFlashAttribute("message", "Anime was successfully deleted");
+            redirectAttributes.addFlashAttribute("message", "Delete Success");
+        }else{
+            redirectAttributes.addFlashAttribute("message", "Delete Failure");
         }
-
-        redirectAttributes.addFlashAttribute("message", "Unable to delete anime");
-        return "redirect:/viewAnimeList";
+        
+        return "redirect:/animeList";
     }
 }

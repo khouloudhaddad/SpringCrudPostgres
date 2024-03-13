@@ -38,7 +38,7 @@ public class AnimeService {
     public boolean deleteAnime(Long id){
         animeRepository.deleteById(id);
 
-        if (animeRepository.findById(id) == null){
+        if (animeRepository.findById(id) != null){
             return true;
         }
         return false;
